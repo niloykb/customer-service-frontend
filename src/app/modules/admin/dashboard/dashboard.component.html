@@ -1,0 +1,14 @@
+<div class="customers">
+    @for (customer of customers; track $index) {
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-card-title>{{ customer.name }}</mat-card-title>
+                <mat-card-subtitle>{{ customer.email }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Address: {{ customer.address }}</p>
+                <p>Postal Code: {{ customer.postalCode }}</p>
+            </mat-card-content>
+        </mat-card>
+    }
+</div>
