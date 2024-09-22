@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { SharedModule } from '../../shared/shared.module';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 interface Credentials {
   email: string;
   password: string;
@@ -18,11 +19,9 @@ export class LoginComponent implements OnInit {
 
   router = inject(Router);
   authService = inject(AuthService);
+  snackbar = inject(SnackbarService);
 
-  ngOnInit(): void {
-    const token = localStorage.getItem('token');
-    console.log("🚀 ~ token:", token)
-  }
+  ngOnInit(): void { }
 
   credentials = {
     email: '',
@@ -32,9 +31,10 @@ export class LoginComponent implements OnInit {
   LoginForm(credentials: Credentials) {
     this.authService.login(credentials).subscribe({
       next: (response: any) => {
-       if(response.token) {
-        this.router.navigate(['/admin/dashboard']);
-       }
+        if (response.token) {
+          this.snackbar.openSnackBar({ message: 'Logged in successfully', class: 'submit-success' });
+          this.router.navigate(['/admin/dashboard']);
+        }
       },
       error: (error) => console.error('Error logging in:', error),
     })

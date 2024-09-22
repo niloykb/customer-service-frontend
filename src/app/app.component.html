@@ -1,10 +1,10 @@
 <mat-drawer-container class="example-container" autosize>
     <mat-drawer #drawer class="example-sidenav" mode="over">
-        <mat-nav-list>
-            <mat-list-item role="listitem">Item 1</mat-list-item>
-            <mat-list-item role="listitem">Item 2</mat-list-item>
-            <mat-list-item role="listitem">Item 3</mat-list-item>
-        </mat-nav-list>
+        <mat-list role="list">
+            <mat-list-item role="listitem" routerLink="admin/dashboard" routerLinkActive="active">Dashboard</mat-list-item>
+            <mat-list-item role="listitem" routerLink="admin/users" routerLinkActive="active">Users</mat-list-item>
+            <mat-list-item role="listitem" routerLink="admin/invoices" routerLinkActive="active">Invoices</mat-list-item>
+        </mat-list>
     </mat-drawer>
 
     <mat-drawer-content>
@@ -22,16 +22,15 @@
             <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
                 <mat-icon>share</mat-icon>
             </button>
-            <button mat-icon-button class="example-icon" matTooltip="Logout" (click)="logout()"
-                aria-label="Example icon-button with logout icon">
+            <button mat-icon-button class="example-icon" matTooltip="Logout"
+                aria-label="Example icon-button with logout icon" (click)="logout()">
                 <mat-icon>power_settings_new</mat-icon>
             </button>
-
         </mat-toolbar>
-        <mat-progress-bar  [mode]="modeType">
-        </mat-progress-bar>
+        @if(loader.isLoading$ | async) {
+        <mat-progress-bar [mode]="modeType" />
         }
-
+        }
         <router-outlet />
     </mat-drawer-content>
 

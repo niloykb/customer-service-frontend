@@ -1,6 +1,7 @@
+import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 
 interface User {
@@ -18,6 +19,7 @@ interface Credentials {
 })
 export class AuthService {
 
+  private platformId = inject(PLATFORM_ID);
   private apiUrl = environment.apiUrl;
   private http = inject(HttpClient)
 
@@ -40,7 +42,10 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return !!localStorage.getItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      return !!localStorage?.getItem('token');
+    }
+    return false;
   }
 
 }
