@@ -1,17 +1,19 @@
 <div class="container">
     <mat-card class="card">
-        <mat-card-title>Login to the system</mat-card-title>
-        <form class="login-form" #loginForm="ngForm" (ngSubmit)="LoginForm(loginForm.value)">
+        <mat-card-title>Login Here</mat-card-title>
+        <form class="login-form" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.value)">
             <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
-                <input matInput name="email" [(ngModel)]="credentials.email" placeholder="Enter your email" required>
+                <input matInput [(ngModel)]="credentials.email" name="email" placeholder="Enter your email" required>
+                <mat-error>Email is required</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Password</mat-label>
-                <input matInput name="password" type="password" [(ngModel)]="credentials.password"
+                <input matInput [(ngModel)]="credentials.password" name="password" type="password"
                     placeholder="Enter your password" required>
+                <mat-error>Password is required</mat-error>
             </mat-form-field>
-            <button mat-raised-button color="primary">Login</button>
+            <button mat-raised-button>Login</button>
         </form>
     </mat-card>
 </div>

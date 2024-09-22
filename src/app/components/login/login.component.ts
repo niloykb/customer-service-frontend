@@ -3,6 +3,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+
 interface Credentials {
   email: string;
   password: string;
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
     password: '',
   };
 
-  LoginForm(credentials: Credentials) {
+  onSubmit(credentials: Credentials) {
     this.authService.login(credentials).subscribe({
       next: (response: any) => {
         if (response.token) {
