@@ -32,10 +32,22 @@
             <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
                 <mat-icon>share</mat-icon>
             </button>
-            <button mat-icon-button class="example-icon" matTooltip="Logout"
-                aria-label="Example icon-button with logout icon" (click)="logout()">
+            <button mat-icon-button class="example-icon" [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with logout icon">
                 <mat-icon>power_settings_new</mat-icon>
             </button>
+
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                    <mat-icon>person</mat-icon>
+                  <span>Admin</span>
+                </button>
+                <button mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                  <span>Logout</span>
+                </button>
+              </mat-menu>
+              
         </mat-toolbar>
         @if(loader.isLoading$ | async) {
         <mat-progress-bar [mode]="modeType" />

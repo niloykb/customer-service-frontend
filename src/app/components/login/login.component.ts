@@ -30,14 +30,25 @@ export class LoginComponent implements OnInit {
   };
 
   onSubmit(credentials: Credentials) {
-    this.authService.login(credentials).subscribe({
-      next: (response: any) => {
-        if (response.token) {
-          this.snackbar.openSnackBar({ message: 'Logged in successfully', class: 'submit-success' });
-          this.router.navigate(['/admin/dashboard']);
-        }
-      },
-      error: (error) => console.error('Error logging in:', error),
-    })
+    if (credentials) {
+      this.authService.login(credentials).subscribe({
+        next: (response: any) => {
+          if (response.token) {
+            this.snackbar.openSnackBar({
+              message: 'Logged in successfully',
+              class: 'submit-success'
+            });
+            this.router.navigate(['/admin/dashboard']);
+          }
+        },
+        error: (error) => {
+          console.error('Error logging in:', error);
+          this.snackbar.openSnackBar({
+            message: 'Login failed!',
+            class: 'submit-error'
+          });
+        },
+      })
+    }
   }
 }
