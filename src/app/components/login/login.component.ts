@@ -17,7 +17,7 @@ interface Credentials {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-
+  isSubmit = false;
   router = inject(Router);
   authService = inject(AuthService);
   snackbar = inject(SnackbarService);
@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
   };
 
   onSubmit(credentials: Credentials) {
+    this.isSubmit = true;
     if (credentials) {
       this.authService.login(credentials).subscribe({
         next: (response: any) => {
@@ -38,10 +39,12 @@ export class LoginComponent implements OnInit {
               message: 'Logged in successfully',
               class: 'submit-success'
             });
+            this.isSubmit = false;
             this.router.navigate(['/admin/dashboard']);
           }
         },
         error: (error) => {
+          this.isSubmit = false;
           console.error('Error logging in:', error);
           this.snackbar.openSnackBar({
             message: 'Login failed!',

@@ -1,10 +1,9 @@
-import { HttpEvent, HttpInterceptorFn } from '@angular/common/http';
+import { finalize, tap } from 'rxjs';
 import { inject } from '@angular/core';
 import { LoaderService } from '../services/loader.service';
-import { finalize, tap } from 'rxjs';
+import { HttpEvent, HttpInterceptorFn } from '@angular/common/http';
 
-export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
-
+export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   const loader = inject(LoaderService);
   loader.setRequestType(req.method);
   loader.showLoader();
@@ -16,4 +15,5 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
     }),
     finalize(() => loader.hideLoader())
   );
+  return next(req);
 };

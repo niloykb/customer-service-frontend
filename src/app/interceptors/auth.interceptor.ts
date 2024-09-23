@@ -1,9 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { HttpInterceptorFn } from '@angular/common/http';
 import { inject, PLATFORM_ID } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
 
-
-export const apiInterceptor: HttpInterceptorFn = (req, next) => {
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
 
   if (isPlatformBrowser(platformId)) {
@@ -16,6 +15,5 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
       return next(newReq);
     }
   }
-
   return next(req);
 };

@@ -13,7 +13,7 @@
                     placeholder="Enter your password" required>
                 <mat-error>Password is required</mat-error>
             </mat-form-field>
-            <button mat-raised-button [disabled]="loginForm.invalid">Login</button>
+            <button mat-raised-button [disabled]="loginForm.invalid || isSubmit">Login</button>
         </form>
     </mat-card>
 </div>
