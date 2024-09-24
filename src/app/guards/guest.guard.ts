@@ -1,10 +1,10 @@
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { CanActivateFn, Router } from '@angular/router';
 
 export const guestGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
   const router = inject(Router);
+  const authService = inject(AuthService);
 
   if (authService.isLoggedIn()) {
     router.navigate(['/admin/dashboard']);

@@ -1,14 +1,10 @@
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
+import { User } from '../shared/models/user.model';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 
-interface User {
-  id: number;
-  email: string;
-  token: string;
-}
 interface Credentials {
   email: string;
   password: string;

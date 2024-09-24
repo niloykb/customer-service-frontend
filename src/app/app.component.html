@@ -1,58 +1,11 @@
 <mat-drawer-container class="example-container" autosize>
     <mat-drawer #drawer class="example-sidenav" mode="over">
-        <mat-nav-list>
-            <mat-list-item #dashboardLink="routerLinkActive" [activated]="dashboardLink.isActive"
-                routerLink="admin/dashboard" routerLinkActive="active">
-                <mat-icon>dashboard</mat-icon>Dashboard
-            </mat-list-item>
-            <mat-list-item #usersLink="routerLinkActive" [activated]="usersLink.isActive" routerLink="admin/users"
-                routerLinkActive="active">
-                <mat-icon>group</mat-icon> Users
-            </mat-list-item>
-            <mat-list-item #invoicesLink="routerLinkActive" [activated]="invoicesLink.isActive"
-                routerLink="admin/invoices" routerLinkActive="active">
-                <mat-icon>file_copy</mat-icon>Invoices
-            </mat-list-item>
-        </mat-nav-list>
+        <app-sidenav></app-sidenav>
     </mat-drawer>
-
     <mat-drawer-content>
-        @if(authService.isLoggedIn()) {
-        <mat-toolbar>
-            <button mat-icon-button class="example-icon" (click)="drawer.toggle()"
-                aria-label="Example icon-button with menu icon">
-                <mat-icon>menu</mat-icon>
-            </button>
-            <span>Customer Service</span>
-            <span class="example-spacer"></span>
-            <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-                <mat-icon>favorite</mat-icon>
-            </button>
-            <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-                <mat-icon>share</mat-icon>
-            </button>
-            <button mat-icon-button class="example-icon" [matMenuTriggerFor]="menu"
-                aria-label="Example icon-button with logout icon">
-                <mat-icon>power_settings_new</mat-icon>
-            </button>
-
-            <mat-menu #menu="matMenu">
-                <button mat-menu-item>
-                    <mat-icon>person</mat-icon>
-                    <span>Admin</span>
-                </button>
-                <button mat-menu-item (click)="logout()">
-                    <mat-icon>exit_to_app</mat-icon>
-                    <span>Logout</span>
-                </button>
-            </mat-menu>
-
-        </mat-toolbar>
-        @if(loader.isLoading$ | async) {
-        <mat-progress-bar [mode]="modeType" />
+        @if(isLoggedIn) {
+        <app-header [drawer]="drawer"></app-header>
         }
-        }
-        <router-outlet />
+        <router-outlet></router-outlet>
     </mat-drawer-content>
-
 </mat-drawer-container>
