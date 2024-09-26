@@ -19,7 +19,7 @@ interface Credentials {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-  
+
   submitted = false;
   router = inject(Router);
   authService = inject(AuthService);
@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void { }
 
   loginForm = this.formBuilder.group({
-    email: ['', Validators.required, Validators.email],
-    password: ['', Validators.required, Validators.minLength(8)],
+    email: ['', Validators.required],
+    password: ['', Validators.required],
   })
 
   onSubmit() {
