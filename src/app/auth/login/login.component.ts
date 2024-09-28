@@ -29,9 +29,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void { }
 
   loginForm = this.formBuilder.group({
-    email: ['', Validators.required, Validators.email],
-    password: ['', Validators.required, Validators.minLength(8)],
-  })
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+});
 
   onSubmit() {
     this.submitted = true;
@@ -49,10 +49,11 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error) => {
+          console.log("🚀 ~ LoginComponent ~ this.authService.login ~ error:", error)
           this.submitted = false;
           console.error('Error logging in:', error);
           this.snackbar.openSnackBar({
-            message: 'Login failed!',
+            message: error.error.message,
             class: 'submit-error'
           });
         },

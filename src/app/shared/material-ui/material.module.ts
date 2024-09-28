@@ -5,6 +5,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatRippleModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -25,6 +26,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatCardModule,
     MatMenuModule,
     MatInputModule,
+    MatRippleModule,
     MatButtonModule,
     MatTooltipModule,
     MatToolbarModule,
@@ -43,6 +45,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatCardModule,
     MatMenuModule,
     MatInputModule,
+    MatRippleModule,
     MatButtonModule,
     MatTooltipModule,
     MatToolbarModule,
