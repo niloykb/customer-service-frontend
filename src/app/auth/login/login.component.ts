@@ -10,7 +10,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   selector: 'app-login',
   standalone: true,
   imports: [SharedModule, ReactiveFormsModule],
-
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

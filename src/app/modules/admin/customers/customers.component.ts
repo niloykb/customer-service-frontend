@@ -1,28 +1,38 @@
-import { DatePipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 import { merge, of as observableOf } from 'rxjs';
+import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { Customer, CustomerService } from '../../../services/customer.service';
-
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule],
+  imports: [
+    MatIcon,
+    MatSortModule,
+    MatTableModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+  ]
 })
 export class CustomersComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'name', 'type', 'email', 'city', 'state', 'address', 'postalCode'];
+  displayedColumns: string[] = ['id', 'name', 'type', 'email', 'city', 'state', 'address', 'postalCode', 'action'];
 
   customerService = inject(CustomerService);
   customers: Customer[] = [];
 
   pageSize = 0;
+  selectedPageSize = 15;
   resultsLength = 0;
   isLoadingResults = true;
 
@@ -30,6 +40,7 @@ export class CustomersComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
+    console.log("🚀 ~ CustomersComponent ~ ngAfterViewInit ~ this.paginator.pageSize:", this.paginator.page)
 
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
@@ -57,6 +68,21 @@ export class CustomersComponent implements AfterViewInit {
         }),
       )
       .subscribe(data => (this.customers = data));
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    console.log("🚀 ~ CustomersComponent ~ applyFilter ~ filterValue:", filterValue)
+    // this.customers.filter = filterValue.trim().toLowerCase();
+
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
+  }
+
+  onPageChange(event: PageEvent) {
+    this.selectedPageSize = event.pageSize;
+    console.log('Page size changed to:', event.pageSize);
   }
 }
 
