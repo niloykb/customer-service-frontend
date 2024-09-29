@@ -18,7 +18,7 @@ type ModeType = 'query' | 'indeterminate';
 export class HeaderComponent {
   @Input() drawer!: MatDrawer;
 
-  loadingMode!: ModeType;
+  loadingMode: ModeType = 'indeterminate';
 
   router = inject(Router);
   loader = inject(LoaderService);
@@ -37,7 +37,7 @@ export class HeaderComponent {
 
   logout() {
     this.authService.logout();
-    this.snackbar.openSnackBar({ message: 'Logged Out successfully', class: 'submit-success' });
+    this.snackbar.openSnackBar({ message: 'Logged out successfully', class: 'submit-success' });
     this.router.navigateByUrl('/login');
   }
 }

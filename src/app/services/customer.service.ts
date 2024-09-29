@@ -1,6 +1,7 @@
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { SortDirection } from '@angular/material/sort';
 import { environment } from '../../environments/environment.development';
 export interface Customer {
   id: number;
@@ -11,6 +12,29 @@ export interface Customer {
   state: string;
   address: string;
   postalCode: string;
+}
+
+export interface Links {
+  first: string;
+  last: string;
+  prev: string;
+  next: string;
+}
+
+export interface Meta {
+  current_page: number;
+  from: number;
+  last_page: number;
+  links: any;
+  path: string;
+  per_page: number;
+  to: number;
+  total: number;
+}
+export interface CustomerResponse {
+  data: Customer[];
+  links: Links;
+  meta: Meta;
 }
 
 @Injectable({
@@ -37,5 +61,10 @@ export class CustomerService {
 
   deleteCustomer(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getCustomerCollection(sort: string, order: SortDirection, page: number): Observable<CustomerResponse> {
+    const requestUrl = `${this.apiUrl}/customers?sort=${sort}&order=${order}&page=${page + 1}`;
+    return this.http.get<CustomerResponse>(requestUrl);
   }
 }

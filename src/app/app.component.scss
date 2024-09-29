@@ -1,3 +1,16 @@
 mat-drawer-content {
     height: 100vh;
 }
+
+app-header {
+    top: 0;
+    z-index: 1;
+    position: sticky;
+}
+
+.mat-drawer-content {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+}

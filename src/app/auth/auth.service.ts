@@ -4,11 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { User } from '../shared/models/user.model';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-
-interface Credentials {
-  email: string;
-  password: string;
-}
+import { Credentials } from './types';
 
 @Injectable({
   providedIn: 'root'

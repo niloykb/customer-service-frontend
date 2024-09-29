@@ -1,14 +1,11 @@
+import { Credentials } from '../types';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { SharedModule } from '../../shared/shared.module';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 
-interface Credentials {
-  email: string;
-  password: string;
-}
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -18,7 +15,7 @@ interface Credentials {
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   submitted = false;
   router = inject(Router);
@@ -26,22 +23,20 @@ export class LoginComponent implements OnInit {
   snackbar = inject(SnackbarService);
   formBuilder = inject(FormBuilder);
 
-  ngOnInit(): void { }
-
-  loginForm = this.formBuilder.group({
-    email: ['', Validators.required],
-    password: ['', Validators.required],
-  })
+  loginForm = this.formBuilder.nonNullable.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+  });
 
   onSubmit() {
     this.submitted = true;
     if (this.loginForm.valid) {
-      const credentials: Credentials = this.loginForm.value as unknown as Credentials;
+      const credentials = this.loginForm.value as Credentials;;
       this.authService.login(credentials).subscribe({
         next: (response: any) => {
           if (response.token) {
             this.snackbar.openSnackBar({
-              message: 'Logged in successfully',
+              message: response.message,
               class: 'submit-success'
             });
             this.submitted = false;
@@ -50,9 +45,8 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           this.submitted = false;
-          console.error('Error logging in:', error);
           this.snackbar.openSnackBar({
-            message: 'Login failed!',
+            message: error.error.message,
             class: 'submit-error'
           });
         },

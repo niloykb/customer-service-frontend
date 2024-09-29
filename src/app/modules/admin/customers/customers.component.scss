@@ -1,0 +1,27 @@
+.container {
+    position: relative;
+}
+
+.table-container {
+    overflow: auto;
+    max-height: 60vh;
+    min-height: 80vh;
+    position: relative;
+}
+
+table {
+    width: 100%;
+}
+
+.loading-shade {
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    bottom: 56px;
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.15);
+}

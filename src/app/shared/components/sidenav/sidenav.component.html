@@ -3,6 +3,10 @@
         routerLinkActive="active">
         <mat-icon>dashboard</mat-icon>Dashboard
     </mat-list-item>
+    <mat-list-item #customerLink="routerLinkActive" [activated]="customerLink.isActive" routerLink="admin/customers"
+        routerLinkActive="active">
+        <mat-icon>supervisor_account</mat-icon>Customers
+    </mat-list-item>
     <mat-list-item #usersLink="routerLinkActive" [activated]="usersLink.isActive" routerLink="admin/users"
         routerLinkActive="active">
         <mat-icon>group</mat-icon> Users

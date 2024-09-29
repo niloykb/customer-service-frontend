@@ -27,4 +27,7 @@
         </button>
     </mat-menu>
 </mat-toolbar>
-<mat-progress-bar *ngIf="loader.isLoading$ | async" [mode]="loadingMode"></mat-progress-bar>
+
+<div class="loader-container" *ngIf="loader.isLoading$ | async">
+    <mat-progress-bar [mode]="loadingMode"></mat-progress-bar>
+</div>
