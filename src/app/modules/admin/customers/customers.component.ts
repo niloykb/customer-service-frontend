@@ -1,5 +1,5 @@
+import { merge, of } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
-import { merge, of as observableOf } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,7 @@ import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Customer, CustomerService } from '../../../services/customer.service';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -32,35 +32,33 @@ export class CustomersComponent implements AfterViewInit {
   customers: Customer[] = [];
 
   pageSize = 0;
-  selectedPageSize = 15;
+  filterValue = '';
   resultsLength = 0;
+  selectedPageSize = 15;
   isLoadingResults = true;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
-    console.log("🚀 ~ CustomersComponent ~ ngAfterViewInit ~ this.paginator.pageSize:", this.paginator.page)
-
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.customerService!.getCustomerCollection(
+          return this.customerService?.getCustomerCollection(
             this.sort.active,
             this.sort.direction,
             this.paginator.pageIndex,
-          ).pipe(catchError(() => observableOf(null)));
+            this.paginator.pageSize,
+            this.filterValue
+          ).pipe(catchError(() => of(null)));
         }),
         map(data => {
           this.isLoadingResults = false;
 
-          if (data === null) {
-            return [];
-          }
+          if (!data) return [];
 
           this.pageSize = data.meta.per_page;
           this.resultsLength = data.meta.total;
@@ -72,17 +70,14 @@ export class CustomersComponent implements AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log("🚀 ~ CustomersComponent ~ applyFilter ~ filterValue:", filterValue)
-    // this.customers.filter = filterValue.trim().toLowerCase();
 
-    // if (this.dataSource.paginator) {
-    //   this.dataSource.paginator.firstPage();
-    // }
-  }
+    this.filterValue = filterValue.trim().toLowerCase();
 
-  onPageChange(event: PageEvent) {
-    this.selectedPageSize = event.pageSize;
-    console.log('Page size changed to:', event.pageSize);
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
+
+    this.sort.sortChange.emit();
   }
 }
 
