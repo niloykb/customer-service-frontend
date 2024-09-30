@@ -63,8 +63,17 @@ export class CustomerService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getCustomerCollection(sort: string, order: SortDirection, page: number, pageSize: number, filterValue: string): Observable<CustomerResponse> {
+  getCustomerCollection(
+    sort: string, 
+    order: SortDirection, 
+    page: number, 
+    pageSize: number, 
+    filterValue: string
+  ): Observable<CustomerResponse> {
+
     const requestUrl = `${this.apiUrl}/customers?sort=${sort}&order=${order}&page=${page + 1}&page_size=${pageSize}&filter_value=${filterValue}`;
+    
     return this.http.get<CustomerResponse>(requestUrl);
   }
+  
 }

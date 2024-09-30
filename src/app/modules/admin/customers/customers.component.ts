@@ -1,10 +1,10 @@
-import { merge, of } from 'rxjs';
+import { fromEvent, merge, of } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, map, startWith, switchMap } from 'rxjs/operators';
 import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Customer, CustomerService } from '../../../services/customer.service';
@@ -69,15 +69,23 @@ export class CustomersComponent implements AfterViewInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+    const inputElement = event.target as HTMLInputElement;
 
-    this.filterValue = filterValue.trim().toLowerCase();
+    fromEvent(inputElement, 'input')
+      .pipe(
+        debounceTime(400),
+        map((e: Event) => inputElement.value.trim().toLowerCase())
+      )
+      .subscribe((filterValue: string) => {
+        this.filterValue = filterValue;
 
-    if (this.paginator) {
-      this.paginator.firstPage();
-    }
+        if (this.paginator) {
+          this.paginator.firstPage();
+        }
 
-    this.sort.sortChange.emit();
+        this.sort.sortChange.emit();
+      });
   }
+
 }
 
