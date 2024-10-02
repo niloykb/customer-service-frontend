@@ -4,11 +4,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { catchError, debounceTime, map, startWith, switchMap } from 'rxjs/operators';
 import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Customer, CustomerService } from '../../../services/customer.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { catchError, debounceTime, map, startWith, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -73,7 +73,7 @@ export class CustomersComponent implements AfterViewInit {
 
     fromEvent(inputElement, 'input')
       .pipe(
-        debounceTime(400),
+        debounceTime(500),
         map((e: Event) => inputElement.value.trim().toLowerCase())
       )
       .subscribe((filterValue: string) => {

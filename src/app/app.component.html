@@ -3,7 +3,7 @@
         <app-sidenav></app-sidenav>
     </mat-drawer>
     <mat-drawer-content>
-        @if(isLoggedIn) {
+        @if(authService.currentUserSig()) {
         <app-header [drawer]="drawer"></app-header>
         <router-outlet class="router-outlet"></router-outlet>
         <app-footer></app-footer>

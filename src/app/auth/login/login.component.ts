@@ -33,13 +33,14 @@ export class LoginComponent {
       const credentials = this.loginForm.value as Credentials;;
       this.authService.login(credentials).subscribe({
         next: (response: any) => {
+          this.authService.currentUserSig.set(response.user);
           if (response.token) {
             this.snackbar.openSnackBar({
               message: response.message,
               class: 'submit-success'
             });
             this.submitted = false;
-            this.router.navigate(['/admin/dashboard']);
+            this.router.navigateByUrl('/admin/dashboard');
           }
         },
         error: (error) => {

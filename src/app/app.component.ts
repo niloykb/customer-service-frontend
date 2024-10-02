@@ -16,7 +16,4 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 export class AppComponent {
   authService = inject(AuthService);
 
-  get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
-  }
 }
