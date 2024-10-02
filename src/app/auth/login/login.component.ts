@@ -33,7 +33,6 @@ export class LoginComponent {
       const credentials = this.loginForm.value as Credentials;;
       this.authService.login(credentials).subscribe({
         next: (response: any) => {
-          this.authService.currentUserSig.set(response.user);
           if (response.token) {
             this.snackbar.openSnackBar({
               message: response.message,

@@ -36,9 +36,8 @@ export class HeaderComponent {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.router.navigateByUrl('/login');
-    this.authService.currentUserSig.set(null);
     this.snackbar.openSnackBar({ message: 'Logged out successfully', class: 'submit-success' });
   }
 }
