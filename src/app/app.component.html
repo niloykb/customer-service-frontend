@@ -3,12 +3,18 @@
         <app-sidenav></app-sidenav>
     </mat-drawer>
     <mat-drawer-content>
+        @if(authService.isAuthStateLoaded()) {
+        <h1>loading............</h1>
+        }@else {
         @if(authService.isLoggedIn()) {
+        @defer {
         <app-header [drawer]="drawer"></app-header>
         <router-outlet class="router-outlet"></router-outlet>
         <app-footer></app-footer>
+        }
         } @else {
         <router-outlet></router-outlet>
+        }
         }
     </mat-drawer-content>
 </mat-drawer-container>
