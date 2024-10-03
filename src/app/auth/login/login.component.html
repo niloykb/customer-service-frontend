@@ -23,7 +23,7 @@
                 </mat-error>
                 }
             </mat-form-field>
-            <button mat-raised-button [disabled]="loginForm.invalid || submitted">Login</button>
+            <button mat-raised-button [disabled]="loginForm.invalid || isSubmitting">Login</button>
         </form>
     </mat-card>
 </div>

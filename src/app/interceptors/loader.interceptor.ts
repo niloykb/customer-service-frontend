@@ -5,9 +5,11 @@ import { HttpEvent, HttpInterceptorFn } from '@angular/common/http';
 import { LoaderService } from '../shared/services/loader.service';
 
 export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
+
   const loader = inject(LoaderService);
-  loader.setRequestType(req.method);
+  
   loader.showLoader();
+  loader.setRequestType(req.method);
 
   console.log('Outgoing HTTP request', req.url);
   return next(req).pipe(
@@ -16,5 +18,4 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
     }),
     finalize(() => loader.hideLoader())
   );
-  return next(req);
 };
