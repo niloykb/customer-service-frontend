@@ -14,3 +14,10 @@ app-header {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr auto;
 }
+
+#spinner {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
