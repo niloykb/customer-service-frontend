@@ -31,7 +31,7 @@ export class HeaderComponent {
 
   processLoader() {
     this.loader.requestType$.subscribe((type: string) => {
-      this.loadingMode = type === 'GET' ? 'query' : 'indeterminate';
+      this.loadingMode = (type === 'GET') ? 'query' : 'indeterminate';
     });
   }
 

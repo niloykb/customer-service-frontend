@@ -2,13 +2,15 @@ import { fromEvent, merge, of } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { SharedModule } from '../../../shared/shared.module';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Customer, CustomerService } from '../../../services/customer.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { catchError, debounceTime, map, startWith, switchMap } from 'rxjs/operators';
+import { DialogService } from '../../../shared/services/dialog.service';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -16,6 +18,7 @@ import { catchError, debounceTime, map, startWith, switchMap } from 'rxjs/operat
   standalone: true,
   imports: [
     MatIcon,
+    SharedModule,
     MatSortModule,
     MatTableModule,
     MatInputModule,
@@ -28,7 +31,9 @@ export class CustomersComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['id', 'name', 'type', 'email', 'city', 'state', 'address', 'postalCode', 'action'];
 
+  dialogService = inject(DialogService);
   customerService = inject(CustomerService);
+
   customers: Customer[] = [];
 
   pageSize = 0;
@@ -85,6 +90,19 @@ export class CustomersComponent implements AfterViewInit {
 
         this.sort.sortChange.emit();
       });
+  }
+
+  onDeleteCustomer(customer: Customer) {
+    this.dialogService.confirmDialog({
+      title: 'Confirm Action',
+      message: `Are you sure you want to delete <b>${customer.name}</b>?`,
+      cancelText: 'No',
+      confirmText: 'Yes',
+    }).subscribe((response) => {
+      if (response) {
+        console.log('The user said YES');
+      }
+    });
   }
 
 }

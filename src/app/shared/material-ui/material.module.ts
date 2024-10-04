@@ -16,6 +16,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialogClose, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -28,6 +29,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatInputModule,
     MatRippleModule,
     MatButtonModule,
+    MatDialogTitle,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogActions,
     MatTooltipModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -47,6 +52,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatInputModule,
     MatRippleModule,
     MatButtonModule,
+    MatDialogTitle,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogActions,
     MatTooltipModule,
     MatToolbarModule,
     MatSidenavModule,
