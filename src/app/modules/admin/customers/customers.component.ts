@@ -1,16 +1,20 @@
-import { fromEvent, merge, of } from 'rxjs';
+import { Customer } from './model/customer';
 import { MatIcon } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { fromEvent, merge, of, Subject } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '../../../shared/shared.module';
+import { CustomerService } from './services/customer.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Customer, CustomerService } from '../../../services/customer.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { catchError, debounceTime, map, startWith, switchMap } from 'rxjs/operators';
-import { DialogService } from '../../../shared/services/dialog.service';
+import { DialogService } from '../../../shared/components/dialogs/dialog.service';
+import { CustomerDialogComponent } from './customer-dialog/customer-dialog.component';
+import { Component, ViewChild, AfterViewInit, inject, OnDestroy } from '@angular/core';
+import { catchError, debounceTime, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -27,14 +31,19 @@ import { DialogService } from '../../../shared/services/dialog.service';
     MatProgressSpinnerModule,
   ]
 })
-export class CustomersComponent implements AfterViewInit {
+export class CustomersComponent implements AfterViewInit, OnDestroy {
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: string[] = ['id', 'name', 'type', 'email', 'city', 'state', 'address', 'postalCode', 'action'];
 
   dialogService = inject(DialogService);
+  snackbarService = inject(SnackbarService);
   customerService = inject(CustomerService);
 
   customers: Customer[] = [];
+  dialog = inject(MatDialog);
 
   pageSize = 0;
   filterValue = '';
@@ -42,13 +51,14 @@ export class CustomersComponent implements AfterViewInit {
   selectedPageSize = 15;
   isLoadingResults = true;
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  private refresh$ = new Subject<void>();
+  private destroy$ = new Subject<void>();
 
   ngAfterViewInit() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    merge(this.sort.sortChange, this.paginator.page)
+    merge(this.sort.sortChange, this.paginator.page, this.refresh$)
       .pipe(
+        takeUntil(this.destroy$),
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
@@ -94,16 +104,38 @@ export class CustomersComponent implements AfterViewInit {
 
   onDeleteCustomer(customer: Customer) {
     this.dialogService.confirmDialog({
-      title: 'Confirm Action',
-      message: `Are you sure you want to delete <b>${customer.name}</b>?`,
+      title: 'Delete Customer',
+      message: `Are you sure you want to delete <strong>${customer.name}</strong>?`,
       cancelText: 'No',
-      confirmText: 'Yes',
+      submitText: 'Yes',
     }).subscribe((response) => {
       if (response) {
-        console.log('The user said YES');
+        this.customerService.deleteCustomer(Number(customer.id)).subscribe(() => {
+          this.refresh$.next();
+          this.snackbarService.openSnackBar({
+            message: `${customer.name} deleted successfully`,
+            class:'submit-success'
+          });
+        });
       }
     });
   }
 
+  openCreateCustomerModal() {
+    this.dialog.open(CustomerDialogComponent, {
+      width: '600px',
+      data: null,
+      disableClose: true,
+    }).afterClosed().subscribe((isCreated) => {
+      if (isCreated) {
+        this.refresh$.next();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
 

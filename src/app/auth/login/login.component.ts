@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { SharedModule } from '../../shared/shared.module';
 import { SnackbarService } from '../../shared/services/snackbar.service';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -15,7 +15,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class LoginComponent {
 
-  isSubmitting = false;
+  isSubmitting = signal(false);
   router = inject(Router);
   authService = inject(AuthService);
   snackbar = inject(SnackbarService);
@@ -26,8 +26,16 @@ export class LoginComponent {
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
+  get email() {
+    return this.loginForm.get('email');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
+  }
+
   onSubmit() {
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
     const credentials = this.loginForm.getRawValue();
     this.authService.login(credentials).subscribe({
       next: ({ message }: any) => {
@@ -35,16 +43,16 @@ export class LoginComponent {
           message: message,
           class: 'submit-success'
         });
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
         this.router.navigateByUrl('/admin/dashboard');
       },
       error: (error) => {
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
         this.snackbar.openSnackBar({
           message: error.error.message,
           class: 'submit-error'
         });
-      },
+      }
     })
   }
 }

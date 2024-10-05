@@ -1,6 +1,6 @@
 import { SharedModule } from '../../../shared.module';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmDialogData } from '../../../models/dialog';
+import { ReusableDialogData } from '../../../models/dialog';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 @Component({
@@ -13,6 +13,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 })
 export class ConfirmationComponent {
 
-  data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
+  data = inject<ReusableDialogData>(MAT_DIALOG_DATA);
 
 }

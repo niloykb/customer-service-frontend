@@ -2,40 +2,9 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
-import { environment } from '../../environments/environment.development';
-export interface Customer {
-  id: number;
-  name: string;
-  type: string;
-  email: string;
-  city: string;
-  state: string;
-  address: string;
-  postalCode: string;
-}
+import { Customer, CustomerResponse } from '../model/customer';
+import { environment } from '../../../../../environments/environment.development';
 
-export interface Links {
-  first: string;
-  last: string;
-  prev: string;
-  next: string;
-}
-
-export interface Meta {
-  current_page: number;
-  from: number;
-  last_page: number;
-  links: any;
-  path: string;
-  per_page: number;
-  to: number;
-  total: number;
-}
-export interface CustomerResponse {
-  data: Customer[];
-  links: Links;
-  meta: Meta;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +21,7 @@ export class CustomerService {
   }
 
   addCustomer(customer: Customer): Observable<Customer> {
-    return this.http.post<Customer>(this.apiUrl, customer);
+    return this.http.post<Customer>(`${this.apiUrl}/customers`, customer);
   }
 
   updateCustomer(customer: Customer): Observable<Customer> {
@@ -60,7 +29,7 @@ export class CustomerService {
   }
 
   deleteCustomer(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/customers/${id}`);
   }
 
   getCustomerCollection(

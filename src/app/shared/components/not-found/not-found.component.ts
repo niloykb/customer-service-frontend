@@ -1,5 +1,5 @@
-import { Router, RouterLink } from '@angular/router';
 import { SharedModule } from '../../shared.module';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 

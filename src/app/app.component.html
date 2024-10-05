@@ -1,21 +1,22 @@
 <mat-drawer-container autosize>
     <mat-drawer #drawer mode="over">
-        <app-sidenav></app-sidenav>
+        <app-sidenav />
     </mat-drawer>
     <mat-drawer-content>
         @defer {
             @if(authService.isLoggedIn()) {
-            <app-header [drawer]="drawer" />
-            <router-outlet />
-            <app-footer />
+                <app-header [drawer]="drawer" />
+                <div class="outlet">
+                    <router-outlet />
+                </div>
+                <app-footer />
             }@else {
-            <router-outlet />
+                <router-outlet />
             }
         }@placeholder (minimum 500ms) {
             <div id="spinner">
                 <mat-spinner />
             </div>
         }
-
     </mat-drawer-content>
 </mat-drawer-container>

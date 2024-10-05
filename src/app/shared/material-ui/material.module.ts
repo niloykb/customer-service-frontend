@@ -9,6 +9,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
@@ -30,6 +31,7 @@ import { MatDialogClose, MatDialogTitle, MatDialogContent, MatDialogActions } fr
     MatRippleModule,
     MatButtonModule,
     MatDialogTitle,
+    MatSelectModule,
     MatDialogClose,
     MatDialogContent,
     MatDialogActions,
@@ -53,6 +55,7 @@ import { MatDialogClose, MatDialogTitle, MatDialogContent, MatDialogActions } fr
     MatRippleModule,
     MatButtonModule,
     MatDialogTitle,
+    MatSelectModule,
     MatDialogClose,
     MatDialogContent,
     MatDialogActions,

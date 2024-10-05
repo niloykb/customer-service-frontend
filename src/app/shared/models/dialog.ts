@@ -1,6 +1,6 @@
-export interface ConfirmDialogData {
+export interface ReusableDialogData {
     title: string;
-    message: string;
-    confirmText: string;
+    message?: string;
+    submitText: string;
     cancelText: string;
 }
