@@ -1,6 +1,7 @@
+import { Customer } from '../customers/model/customer';
 import { Component, inject, OnInit } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
-import { Customer, CustomerService } from '../../../services/customer.service';
+import { CustomerService } from '../customers/services/customer.service';
 
 @Component({
   selector: 'app-dashboard',

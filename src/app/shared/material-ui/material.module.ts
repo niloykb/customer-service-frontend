@@ -9,6 +9,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
@@ -16,6 +17,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialogClose, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -28,6 +30,11 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatInputModule,
     MatRippleModule,
     MatButtonModule,
+    MatDialogTitle,
+    MatSelectModule,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogActions,
     MatTooltipModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -47,6 +54,11 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatInputModule,
     MatRippleModule,
     MatButtonModule,
+    MatDialogTitle,
+    MatSelectModule,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogActions,
     MatTooltipModule,
     MatToolbarModule,
     MatSidenavModule,
