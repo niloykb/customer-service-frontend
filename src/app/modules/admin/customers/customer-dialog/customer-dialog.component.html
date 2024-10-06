@@ -1,4 +1,9 @@
-<h2 mat-dialog-title [innerHTML]="modalTitle"></h2>
+<div class="dialog-header">
+    <h2 mat-dialog-title [innerHTML]="modalTitle"></h2>
+    <button mat-mini-fab (click)="onCloseModal()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
 <mat-dialog-content>
     <form #customerFormGroup="ngForm" [formGroup]="customerForm" (ngSubmit)="onSubmit()">
         <input type="number" formControlName="id" hidden>

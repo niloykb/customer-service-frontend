@@ -7,3 +7,14 @@ mat-form-field {
     display: flex;
     gap: 15px;
 }
+
+.dialog-header {
+    display: flex;
+    align-items: center;
+    background-color: #d7e3ff;
+    justify-content: space-between;
+
+    button {
+        margin-right: 24px;
+    }
+}

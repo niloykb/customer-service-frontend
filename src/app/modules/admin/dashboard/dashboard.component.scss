@@ -2,4 +2,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+    p{
+        font-size: 20px;
+    }
+    .no-data {
+        text-align: center;
+    }
 }

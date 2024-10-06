@@ -138,7 +138,16 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
   }
 
   openUpdateCustomerModal(customer: Customer) {
-    this.openCustomerModal(customer);
+    this.dialogService.confirmDialog({
+      title: 'Update Customer',
+      message: `Are you sure you want to update <strong>${customer.name}</strong>?`,
+      cancelText: 'No',
+      submitText: 'Yes',
+    }).subscribe((response) => {
+      if (response) {
+        this.openCustomerModal(customer);
+      }
+    });
   }
 
   ngOnDestroy() {

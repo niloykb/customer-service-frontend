@@ -22,7 +22,7 @@ export class CustomerDialogComponent {
 
   constructor() {
     this.isUpdateOperation = !!this.data;
-    this.modalTitle = this.isUpdateOperation ? `Update <strong>${this.data.name}'s</strong> Information` : 'Create a New Customer';
+    this.modalTitle = this.isUpdateOperation ? `Update <strong>${this.data.name}'s</strong> Info.` : 'Create a New Customer';
 
     if (this.isUpdateOperation) {
       this.customerFormService.populateForm(this.data);
