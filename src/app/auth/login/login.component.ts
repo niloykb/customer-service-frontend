@@ -41,7 +41,7 @@ export class LoginComponent {
       next: ({ message }: any) => {
         this.snackbar.openSnackBar({
           message: message,
-          class: 'submit-success'
+          class: 'success'
         });
         this.isSubmitting.set(false);
         this.router.navigateByUrl('/admin/dashboard');
@@ -50,7 +50,7 @@ export class LoginComponent {
         this.isSubmitting.set(false);
         this.snackbar.openSnackBar({
           message: error.error.message,
-          class: 'submit-error'
+          class: 'error'
         });
       }
     })

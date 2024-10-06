@@ -11,7 +11,7 @@ import { CustomerService } from '../customers/services/customer.service';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-
+  isLoading = false;
   customerService = inject(CustomerService);
   customers: Customer[] = [];
 
@@ -20,12 +20,14 @@ export class DashboardComponent implements OnInit {
   }
 
   getAllCustomers() {
+    this.isLoading = true;
     this.customerService.getCustomers().subscribe({
       next: (response: any) => {
-        console.log(response.data);
+        this.isLoading = false;
         this.customers = response.data;
       },
       error: (error) => {
+        this.isLoading = false;
         console.error(error);
       }
     })

@@ -38,6 +38,6 @@ export class HeaderComponent {
   logout() {
     this.authService.logout();
     this.router.navigateByUrl('/login');
-    this.snackbar.openSnackBar({ message: 'Logged out successfully', class: 'submit-success' });
+    this.snackbar.openSnackBar({ message: 'Logged out successfully', class: 'success' });
   }
 }

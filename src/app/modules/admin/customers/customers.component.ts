@@ -114,23 +114,31 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
           this.refresh$.next();
           this.snackbarService.openSnackBar({
             message: `${customer.name} deleted successfully`,
-            class:'submit-success'
+            class:'success'
           });
         });
       }
     });
   }
 
-  openCreateCustomerModal() {
+  openCustomerModal(customer?: Customer) {
     this.dialog.open(CustomerDialogComponent, {
       width: '600px',
-      data: null,
+      data: customer || null,
       disableClose: true,
-    }).afterClosed().subscribe((isCreated) => {
-      if (isCreated) {
+    }).afterClosed().subscribe((result: boolean) => {
+      if (result) {
         this.refresh$.next();
       }
     });
+  }
+
+  openCreateCustomerModal() {
+    this.openCustomerModal();
+  }
+
+  openUpdateCustomerModal(customer: Customer) {
+    this.openCustomerModal(customer);
   }
 
   ngOnDestroy() {

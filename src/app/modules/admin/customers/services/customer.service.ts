@@ -20,12 +20,12 @@ export class CustomerService {
     return this.http.get<Customer[]>(`${this.apiUrl}/customers`);
   }
 
-  addCustomer(customer: Customer): Observable<Customer> {
+  createCustomer(customer: Customer): Observable<Customer> {
     return this.http.post<Customer>(`${this.apiUrl}/customers`, customer);
   }
 
   updateCustomer(customer: Customer): Observable<Customer> {
-    return this.http.put<Customer>(`${this.apiUrl}/${customer.id}`, customer);
+    return this.http.put<Customer>(`${this.apiUrl}/customers/${customer.id}`, customer);
   }
 
   deleteCustomer(id: number): Observable<void> {

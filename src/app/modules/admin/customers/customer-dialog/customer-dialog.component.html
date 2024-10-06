@@ -1,6 +1,7 @@
-<h2 mat-dialog-title>Create Customer Modal</h2>
+<h2 mat-dialog-title [innerHTML]="modalTitle"></h2>
 <mat-dialog-content>
     <form #customerFormGroup="ngForm" [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+        <input type="number" formControlName="id" hidden>
         <!-- Name Input -->
         <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
@@ -14,10 +15,10 @@
             <input matInput formControlName="email" placeholder="Enter customer email">
             <mat-error>
                 @if( email?.hasError?.('required')) {
-                Email is required.
+                    Email is required.
                 }
                 @if( email?.hasError?.('email')) {
-                Invalid email.
+                    Invalid email.
                 }
             </mat-error>
         </mat-form-field>
@@ -60,11 +61,10 @@
             <input matInput formControlName="address" placeholder="Enter customer address">
             <mat-error>Address is required.</mat-error>
         </mat-form-field>
-
     </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="false" type="button">Cancel</button>
+    <button mat-button (click)="onCloseModal()" type="button">Cancel</button>
     <button mat-button cdkFocusInitial type="submit" (click)="customerFormGroup.ngSubmit.emit()"
         [disabled]="isSubmitting">{{isSubmitting?'Submitting' : 'Submit'}}
     </button>

@@ -1,8 +1,8 @@
 import { Customer } from '../model/customer';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../../shared/shared.module';
 import { CustomerService } from '../services/customer.service';
+import { SharedModule } from '../../../../shared/shared.module';
 import { CustomerFormService } from '../services/customer-form.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
@@ -16,7 +16,19 @@ import { SnackbarService } from '../../../../shared/services/snackbar.service';
 })
 export class CustomerDialogComponent {
 
+  modalTitle: string;
   isSubmitting = false;
+  isUpdateOperation: boolean;
+
+  constructor() {
+    this.isUpdateOperation = !!this.data;
+    this.modalTitle = this.isUpdateOperation ? `Update <strong>${this.data.name}'s</strong> Information` : 'Create a New Customer';
+
+    if (this.isUpdateOperation) {
+      this.customerFormService.populateForm(this.data);
+    }
+  }
+
   public data = inject<Customer>(MAT_DIALOG_DATA);
   private customerService = inject(CustomerService);
   private snackbarService = inject(SnackbarService);
@@ -24,40 +36,57 @@ export class CustomerDialogComponent {
 
   readonly dialogRef = inject(MatDialogRef<CustomerDialogComponent>);
 
-  get email() {
-    return this.customerForm.get('email');
-  }
-
   get customerForm() {
     return this.customerFormService.customerForm;
   }
 
+  get email() {
+    return this.customerForm.get('email');
+  }
+
   onSubmit(): void {
-    this.isSubmitting = true;
     if (this.customerForm.invalid) {
       this.isSubmitting = false;
       Object.values(this.customerForm.controls).forEach(control => {
+        this.snackbarService.openSnackBar({
+          message: 'Invalid form submitted',
+          class: 'error'
+        });
         control.markAsTouched();
       });
+      return;
     }
+
+    this.isSubmitting = true;
     const customerFormValue = this.customerForm.getRawValue();
-    this.customerService.addCustomer(customerFormValue).subscribe({
+
+    const operation = this.isUpdateOperation
+      ? this.customerService.updateCustomer(customerFormValue)
+      : this.customerService.createCustomer(customerFormValue);
+
+    operation.subscribe({
       next: ({data}: any) => {
-        this.customerForm.reset();
         this.isSubmitting = false;
+        const action = this.isUpdateOperation ? 'updated' : 'created';
+        this.customerForm.reset();
         this.snackbarService.openSnackBar({
-          message: `${data.name} created successfully`,
-          class: 'submit-success'
+          message: `${data.name} ${action} successfully`,
+          class: 'success'
         });
         this.dialogRef.close(true);
       },
-      error: ({error}) => {
+      error: ({ error }) => {
         this.isSubmitting = false;
         this.snackbarService.openSnackBar({
           message: error.message,
-          class: 'submit-error'
+          class: 'error'
         });
       }
     })
+  }
+
+  onCloseModal() {
+    this.dialogRef.close(false);
+    this.customerForm.reset();
   }
 }

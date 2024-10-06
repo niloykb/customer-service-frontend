@@ -3,9 +3,8 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { SharedModule } from './shared/shared.module';
 import { HeaderComponent } from './shared/components/header/header.component';
-import { SidenavComponent } from './shared/components/sidenav/sidenav.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SidenavComponent } from './shared/components/sidenav/sidenav.component';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     RouterOutlet, 
     SidenavComponent, 
     HeaderComponent, 
-    FooterComponent,
-    MatProgressSpinnerModule, 
+    FooterComponent, 
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
