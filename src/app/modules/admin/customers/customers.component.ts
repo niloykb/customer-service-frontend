@@ -1,12 +1,12 @@
 import { Customer } from './model/customer';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
-import { fromEvent, merge, of, Subject } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '../../../shared/shared.module';
 import { CustomerService } from './services/customer.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { fromEvent, merge, Observable, of, Subject } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,7 +14,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { DialogService } from '../../../shared/components/dialogs/dialog.service';
 import { CustomerDialogComponent } from './customer-dialog/customer-dialog.component';
 import { Component, ViewChild, AfterViewInit, inject, OnDestroy } from '@angular/core';
-import { catchError, debounceTime, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -36,7 +36,7 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['id', 'name', 'type', 'email', 'city', 'state', 'address', 'postalCode', 'action'];
+  displayedColumns: string[] = ['index', 'id', 'name', 'type', 'email', 'city', 'state', 'address', 'postalCode', 'action'];
 
   dialogService = inject(DialogService);
   snackbarService = inject(SnackbarService);
@@ -53,53 +53,62 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
 
   private refresh$ = new Subject<void>();
   private destroy$ = new Subject<void>();
+  private filterSubject$ = new Subject<string>();
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    merge(this.sort.sortChange, this.paginator.page, this.refresh$)
-      .pipe(
-        takeUntil(this.destroy$),
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          return this.customerService?.getCustomerCollection(
-            this.sort.active,
-            this.sort.direction,
-            this.paginator.pageIndex,
-            this.paginator.pageSize,
-            this.filterValue
-          ).pipe(catchError(() => of(null)));
-        }),
-        map(data => {
-          this.isLoadingResults = false;
-
-          if (!data) return [];
-
-          this.pageSize = data.meta.per_page;
-          this.resultsLength = data.meta.total;
-          return data.data;
-        }),
-      )
-      .subscribe(data => (this.customers = data));
+    this.sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.paginator.pageIndex = 0;
+    });
+    
+    this.loadCustomers().subscribe(data => this.customers = data);
+    this.setupFilterSubscription();
   }
+
 
   applyFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
+    this.filterSubject$.next(inputElement.value.trim().toLowerCase());
+  }
 
-    fromEvent(inputElement, 'input')
-      .pipe(
-        debounceTime(500),
-        map((e: Event) => inputElement.value.trim().toLowerCase())
-      )
-      .subscribe((filterValue: string) => {
+  private setupFilterSubscription() {
+    this.filterSubject$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap((filterValue: string) => {
         this.filterValue = filterValue;
-
         if (this.paginator) {
           this.paginator.firstPage();
         }
+        console.log(this.filterValue);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.refresh$.next();
+    });
+  }
 
-        this.sort.sortChange.emit();
-      });
+  private loadCustomers(): Observable<any[]> {
+    return merge(this.sort.sortChange, this.paginator.page, this.refresh$).pipe(
+      takeUntil(this.destroy$),
+      startWith({}),
+      switchMap(() => {
+        this.isLoadingResults = true;
+        return this.customerService.getCustomerCollection(
+          this.sort.active,
+          this.sort.direction,
+          this.paginator.pageIndex,
+          this.paginator.pageSize,
+          this.filterValue
+        ).pipe(catchError(() => of(null)));
+      }),
+      map(data => {
+        this.isLoadingResults = false;
+        if (!data) return [];
+        this.pageSize = data.meta.per_page;
+        this.resultsLength = data.meta.total;
+        return data.data;
+      })
+    );
   }
 
   onDeleteCustomer(customer: Customer) {
@@ -114,7 +123,7 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
           this.refresh$.next();
           this.snackbarService.openSnackBar({
             message: `${customer.name} deleted successfully`,
-            class:'success'
+            class: 'success'
           });
         });
       }

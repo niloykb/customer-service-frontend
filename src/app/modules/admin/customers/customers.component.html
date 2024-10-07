@@ -20,9 +20,15 @@
         <table mat-table [dataSource]="customers" matSort matSortActive="id" matSortDisableClear
             matSortDirection="desc">
 
+            <!-- Index Column -->
+            <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let row; let i = index">{{i + 1}}</td>
+            </ng-container>
+
             <!-- Id Column -->
             <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef>#</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
                 <td mat-cell *matCellDef="let row">{{row.id}}</td>
             </ng-container>
 
