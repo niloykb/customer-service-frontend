@@ -1,35 +1,18 @@
-import { Customer } from '../customers/model/customer';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
-import { CustomerService } from '../customers/services/customer.service';
+import {CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, CdkDropList, CdkDrag],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit {
-  isLoading = false;
-  customerService = inject(CustomerService);
-  customers: Customer[] = [];
+export class DashboardComponent {
+  items = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven'];
 
-  ngOnInit(): void {
-    this.getAllCustomers();
-  }
-
-  getAllCustomers() {
-    this.isLoading = true;
-    this.customerService.getCustomers().subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        this.customers = response.data;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        console.error(error);
-      }
-    })
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.items, event.previousIndex, event.currentIndex);
   }
 }

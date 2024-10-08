@@ -1,20 +1,5 @@
-<div class="customers">
-    @defer (when !isLoading) {
-      @if (customers.length) {
-        @for (customer of customers; track customer.id) {
-          <mat-card class="card" matRipple>
-            <mat-card-header>
-              <mat-card-title>{{ customer.name }}</mat-card-title>
-              <mat-card-subtitle>{{ customer.email }}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <p>Address: {{ customer.address }}</p>
-              <p>Postal Code: {{ customer.postalCode }}</p>
-            </mat-card-content>
-          </mat-card>
-        }
-      } @else {
-        <p class="no-data">No customers found!</p>
-      }
-    }
-  </div>
+<div cdkDropList cdkDropListOrientation="mixed" class="widget-list" (cdkDropListDropped)="drop($event)">
+  @for (item of items; track item) {
+    <div class="widget-box" cdkDrag>{{item}}</div>
+  }
+</div>

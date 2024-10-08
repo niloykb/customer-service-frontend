@@ -13,8 +13,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { DialogService } from '../../../shared/components/dialogs/dialog.service';
 import { CustomerDialogComponent } from './customer-dialog/customer-dialog.component';
-import { Component, ViewChild, AfterViewInit, inject, OnDestroy } from '@angular/core';
-import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { Component, ViewChild, AfterViewInit, inject, OnDestroy, ElementRef } from '@angular/core';
+import { catchError, debounceTime, distinctUntilChanged, map, skip, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -33,8 +33,10 @@ import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchM
 })
 export class CustomersComponent implements AfterViewInit, OnDestroy {
 
+
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('filterInput') filterInput!: ElementRef;
 
   displayedColumns: string[] = ['index', 'id', 'name', 'type', 'email', 'city', 'state', 'address', 'postalCode', 'action'];
 
@@ -46,37 +48,30 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
   dialog = inject(MatDialog);
 
   pageSize = 0;
-  filterValue = '';
   resultsLength = 0;
   selectedPageSize = 15;
   isLoadingResults = true;
 
   private destroy$ = new Subject<void>();
   private refresh$ = new Subject<void>();
-  private filterSubject$ = new BehaviorSubject<string>('');
-  private debouncedFilter$ = this.filterSubject$.pipe(
-    debounceTime(500),
-    distinctUntilChanged()
-  );
+
+  private filterSubject = new BehaviorSubject<string>('');
 
   ngAfterViewInit() {
     this.loadCustomers();
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterSubject$.next(filterValue);
-    if (this.paginator) {
-      this.paginator.firstPage();
-    }
+  applyFilter(filterInput: string) {
+    this.paginator.firstPage();
+    this.filterSubject.next(filterInput.trim().toLowerCase());
   }
 
   private loadCustomers() {
     return merge(
       this.refresh$,
-      this.sort.sortChange,
       this.paginator.page,
-      this.debouncedFilter$
+      this.sort.sortChange,
+      this.filterSubject.pipe(skip(1),debounceTime(300), distinctUntilChanged())
     ).pipe(
       takeUntil(this.destroy$),
       startWith({}),
@@ -88,7 +83,7 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
             this.sort.direction,
             this.paginator.pageIndex,
             this.paginator.pageSize,
-            this.filterSubject$.value
+            this.filterSubject.getValue()
           ).pipe(catchError(() => of(null)));
       }),
       map(data => {
@@ -144,6 +139,12 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
     }).subscribe((response) => {
       if (response) this.openCustomerModal(customer);
     });
+  }
+
+  onClearSearch() {
+    this.refresh$.next();
+    this.filterSubject.next('');
+    this.filterInput.nativeElement.value = '';
   }
 
   ngOnDestroy() {
