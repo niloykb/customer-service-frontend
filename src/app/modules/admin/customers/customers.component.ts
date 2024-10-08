@@ -3,10 +3,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { BehaviorSubject, merge, of, Subject } from 'rxjs';
 import { SharedModule } from '../../../shared/shared.module';
 import { CustomerService } from './services/customer.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { fromEvent, merge, Observable, of, Subject } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -51,55 +51,45 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
   selectedPageSize = 15;
   isLoadingResults = true;
 
-  private refresh$ = new Subject<void>();
   private destroy$ = new Subject<void>();
-  private filterSubject$ = new Subject<string>();
+  private refresh$ = new Subject<void>();
+  private filterSubject$ = new BehaviorSubject<string>('');
+  private debouncedFilter$ = this.filterSubject$.pipe(
+    debounceTime(500),
+    distinctUntilChanged()
+  );
 
   ngAfterViewInit() {
-    this.sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.paginator.pageIndex = 0;
-    });
-    
-    this.loadCustomers().subscribe(data => this.customers = data);
-    this.setupFilterSubscription();
+    this.loadCustomers();
   }
-
 
   applyFilter(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.filterSubject$.next(inputElement.value.trim().toLowerCase());
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterSubject$.next(filterValue);
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
   }
 
-  private setupFilterSubscription() {
-    this.filterSubject$.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      tap((filterValue: string) => {
-        this.filterValue = filterValue;
-        if (this.paginator) {
-          this.paginator.firstPage();
-        }
-        console.log(this.filterValue);
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.refresh$.next();
-    });
-  }
-
-  private loadCustomers(): Observable<any[]> {
-    return merge(this.sort.sortChange, this.paginator.page, this.refresh$).pipe(
+  private loadCustomers() {
+    return merge(
+      this.refresh$,
+      this.sort.sortChange,
+      this.paginator.page,
+      this.debouncedFilter$
+    ).pipe(
       takeUntil(this.destroy$),
       startWith({}),
+      tap(() => this.isLoadingResults = true),
       switchMap(() => {
-        this.isLoadingResults = true;
-        return this.customerService.getCustomerCollection(
-          this.sort.active,
-          this.sort.direction,
-          this.paginator.pageIndex,
-          this.paginator.pageSize,
-          this.filterValue
-        ).pipe(catchError(() => of(null)));
+        return this.customerService
+          .getCustomerCollection(
+            this.sort.active,
+            this.sort.direction,
+            this.paginator.pageIndex,
+            this.paginator.pageSize,
+            this.filterSubject$.value
+          ).pipe(catchError(() => of(null)));
       }),
       map(data => {
         this.isLoadingResults = false;
@@ -108,7 +98,7 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
         this.resultsLength = data.meta.total;
         return data.data;
       })
-    );
+    ).subscribe(data => this.customers = data);
   }
 
   onDeleteCustomer(customer: Customer) {
@@ -135,11 +125,10 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
       width: '600px',
       data: customer || null,
       disableClose: true,
-    }).afterClosed().subscribe((result: boolean) => {
-      if (result) {
-        this.refresh$.next();
-      }
-    });
+    }).afterClosed()
+      .subscribe((result: boolean) => {
+        if (result) this.refresh$.next();
+      });
   }
 
   openCreateCustomerModal() {
@@ -153,9 +142,7 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
       cancelText: 'No',
       submitText: 'Yes',
     }).subscribe((response) => {
-      if (response) {
-        this.openCustomerModal(customer);
-      }
+      if (response) this.openCustomerModal(customer);
     });
   }
 
