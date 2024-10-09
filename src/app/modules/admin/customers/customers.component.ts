@@ -33,7 +33,6 @@ import { catchError, debounceTime, distinctUntilChanged, map, skip, startWith, s
 })
 export class CustomersComponent implements AfterViewInit, OnDestroy {
 
-
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('filterInput') filterInput!: ElementRef;
@@ -59,6 +58,7 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.loadCustomers();
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
 
   applyFilter(filterInput: string) {
@@ -67,31 +67,40 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
   }
 
   private loadCustomers() {
-    return merge(
+    merge(
       this.refresh$,
       this.paginator.page,
       this.sort.sortChange,
-      this.filterSubject.pipe(skip(1),debounceTime(300), distinctUntilChanged())
+      this.filterSubject.pipe(
+        skip(1),
+        debounceTime(300),
+        distinctUntilChanged()
+      )
     ).pipe(
       takeUntil(this.destroy$),
       startWith({}),
       tap(() => this.isLoadingResults = true),
       switchMap(() => {
-        return this.customerService
-          .getCustomerCollection(
-            this.sort.active,
-            this.sort.direction,
-            this.paginator.pageIndex,
-            this.paginator.pageSize,
-            this.filterSubject.getValue()
-          ).pipe(catchError(() => of(null)));
-      }),
-      map(data => {
-        this.isLoadingResults = false;
-        if (!data) return [];
-        this.pageSize = data.meta.per_page;
-        this.resultsLength = data.meta.total;
-        return data.data;
+        return this.customerService.getCustomerCollection(
+          this.sort.active,
+          this.sort.direction,
+          this.paginator.pageIndex,
+          this.paginator.pageSize,
+          this.filterSubject.getValue()
+        ).pipe(
+          catchError(error => {
+            console.error('Error occurred:', error);
+            this.isLoadingResults = false;
+            return of(null);
+          }),
+          map(({ data, meta }: any) => {
+            this.isLoadingResults = false;
+            if (!data) return [];
+            this.pageSize = meta.per_page;
+            this.resultsLength = meta.total;
+            return data;
+          })
+        );
       })
     ).subscribe(data => this.customers = data);
   }
@@ -142,7 +151,6 @@ export class CustomersComponent implements AfterViewInit, OnDestroy {
   }
 
   onClearSearch() {
-    this.refresh$.next();
     this.filterSubject.next('');
     this.filterInput.nativeElement.value = '';
   }
