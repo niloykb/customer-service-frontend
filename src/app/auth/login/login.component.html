@@ -2,7 +2,7 @@
     <mat-card class="card">
         <mat-card-title>Login Here</mat-card-title>
         <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <mat-form-field appearance="outline">
+            <mat-form-field>
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email" placeholder="Enter your email">
                 <mat-error>
@@ -14,7 +14,7 @@
                     }
                 </mat-error>
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field>
                 <mat-label>Password</mat-label>
                 <input matInput formControlName="password" type="password" placeholder="Enter your password">
                     <mat-error>

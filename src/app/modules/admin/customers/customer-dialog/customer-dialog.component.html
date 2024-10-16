@@ -8,28 +8,28 @@
     <form #customerFormGroup="ngForm" [formGroup]="customerForm" (ngSubmit)="onSubmit()">
         <input type="number" formControlName="id" hidden>
         <!-- Name Input -->
-        <mat-form-field appearance="outline">
+        <mat-form-field>
             <mat-label>Name</mat-label>
             <input matInput formControlName="name" placeholder="Enter customer name">
             <mat-error>Name is required.</mat-error>
         </mat-form-field>
 
         <!-- Email Input -->
-        <mat-form-field appearance="outline">
+        <mat-form-field>
             <mat-label>Email</mat-label>
             <input matInput formControlName="email" placeholder="Enter customer email">
             <mat-error>
                 @if( email?.hasError?.('required')) {
-                    Email is required.
+                Email is required.
                 }
                 @if( email?.hasError?.('email')) {
-                    Invalid email.
+                Invalid email.
                 }
             </mat-error>
         </mat-form-field>
 
         <!-- Type Input -->
-        <mat-form-field appearance="outline">
+        <mat-form-field>
             <mat-label>Type</mat-label>
             <mat-select formControlName="type">
                 <mat-option value="i">Individual</mat-option>
@@ -40,28 +40,28 @@
 
         <div class="form-fields-group">
             <!-- City Input -->
-            <mat-form-field appearance="outline">
+            <mat-form-field>
                 <mat-label>City</mat-label>
                 <input matInput formControlName="city" placeholder="Enter customer city">
                 <mat-error>City is required.</mat-error>
             </mat-form-field>
             <!-- State Input -->
-            <mat-form-field appearance="outline">
+            <mat-form-field>
                 <mat-label>State</mat-label>
                 <input matInput formControlName="state" placeholder="Enter customer state">
                 <mat-error>State is required.</mat-error>
             </mat-form-field>
         </div>
-        
+
         <!-- Postal Code Input -->
-        <mat-form-field appearance="outline">
+        <mat-form-field>
             <mat-label>Postal Code</mat-label>
             <input matInput formControlName="postalCode" placeholder="Enter customer postal code">
             <mat-error>Postal Code is required.</mat-error>
         </mat-form-field>
 
         <!-- Address Input -->
-        <mat-form-field appearance="outline">
+        <mat-form-field>
             <mat-label>Address</mat-label>
             <input matInput formControlName="address" placeholder="Enter customer address">
             <mat-error>Address is required.</mat-error>

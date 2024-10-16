@@ -8,16 +8,14 @@
     }
 
     <div class="filter-section">
-        <mat-form-field appearance="outline">
+        <mat-form-field>
             <mat-label>Filter customers</mat-label>
             <input matInput (keyup)="applyFilter(filterInput.value)" placeholder="Ex. Anna" #filterInput>
-
             <button matSuffix mat-icon-button aria-label="Clear" (click)="filterInput.value && onClearSearch()">
                 <mat-icon>{{filterInput.value? 'close':'search'}}</mat-icon>
             </button>
-            
         </mat-form-field>
-        <button mat-fab matTooltip="Add customer" (click)="openCreateCustomerModal()"><mat-icon>add</mat-icon></button>
+        <button mat-mini-fab matTooltip="Add customer" (click)="openCreateCustomerModal()"><mat-icon>add</mat-icon></button>
     </div>
 
     <div class="table-container">
