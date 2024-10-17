@@ -11,6 +11,7 @@
         <mat-form-field>
             <mat-label>Name</mat-label>
             <input matInput formControlName="name" placeholder="Enter customer name">
+            <mat-icon matSuffix>person</mat-icon>
             <mat-error>Name is required.</mat-error>
         </mat-form-field>
 
@@ -18,6 +19,7 @@
         <mat-form-field>
             <mat-label>Email</mat-label>
             <input matInput formControlName="email" placeholder="Enter customer email">
+            <mat-icon matSuffix>email</mat-icon>
             <mat-error>
                 @if( email?.hasError?.('required')) {
                 Email is required.
@@ -37,8 +39,7 @@
             </mat-select>
             <mat-error>Type is required.</mat-error>
         </mat-form-field>
-
-        <div class="form-fields-group">
+        <div class="form-row">
             <!-- City Input -->
             <mat-form-field>
                 <mat-label>City</mat-label>
@@ -49,6 +50,7 @@
             <mat-form-field>
                 <mat-label>State</mat-label>
                 <input matInput formControlName="state" placeholder="Enter customer state">
+                <mat-icon matSuffix>state</mat-icon>
                 <mat-error>State is required.</mat-error>
             </mat-form-field>
         </div>
@@ -57,13 +59,14 @@
         <mat-form-field>
             <mat-label>Postal Code</mat-label>
             <input matInput formControlName="postalCode" placeholder="Enter customer postal code">
+            <mat-icon matSuffix>location_on</mat-icon>
             <mat-error>Postal Code is required.</mat-error>
         </mat-form-field>
 
         <!-- Address Input -->
         <mat-form-field>
             <mat-label>Address</mat-label>
-            <input matInput formControlName="address" placeholder="Enter customer address">
+            <textarea matInput formControlName="address" placeholder="Enter customer address"></textarea>
             <mat-error>Address is required.</mat-error>
         </mat-form-field>
     </form>

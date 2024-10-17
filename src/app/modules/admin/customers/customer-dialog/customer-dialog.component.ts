@@ -6,6 +6,8 @@ import { SharedModule } from '../../../../shared/shared.module';
 import { CustomerFormService } from '../services/customer-form.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
+import { FormValidationService } from '../../../../shared/validations/form-validation.service';
+
 
 @Component({
   selector: 'app-customer-dialog',
@@ -33,6 +35,7 @@ export class CustomerDialogComponent {
   private customerService = inject(CustomerService);
   private snackbarService = inject(SnackbarService);
   private customerFormService = inject(CustomerFormService);
+  private formValidationService = inject(FormValidationService);
 
   readonly dialogRef = inject(MatDialogRef<CustomerDialogComponent>);
 
@@ -47,14 +50,7 @@ export class CustomerDialogComponent {
   onSubmit(): void {
     if (this.customerForm.invalid) {
       this.isSubmitting = false;
-      Object.values(this.customerForm.controls).forEach(control => {
-        this.snackbarService.openSnackBar({
-          message: 'Invalid form submitted',
-          class: 'error'
-        });
-        control.markAsTouched();
-      });
-      return;
+      return this.formValidationService.validationMessage(this.customerForm);
     }
 
     this.isSubmitting = true;
@@ -65,7 +61,7 @@ export class CustomerDialogComponent {
       : this.customerService.createCustomer(customerFormValue);
 
     operation.subscribe({
-      next: ({data}: any) => {
+      next: ({ data }: any) => {
         this.isSubmitting = false;
         const action = this.isUpdateOperation ? 'updated' : 'created';
         this.customerForm.reset();

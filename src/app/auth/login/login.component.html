@@ -5,26 +5,29 @@
             <mat-form-field>
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email" placeholder="Enter your email">
+                <mat-icon matSuffix>email</mat-icon>
                 <mat-error>
                     @if( email?.hasError?.('required')) {
-                        Email is required.
+                    Email is required.
                     }
                     @if( email?.hasError?.('email')) {
-                        Invalid email.
+                    Invalid email.
                     }
                 </mat-error>
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Password</mat-label>
                 <input matInput formControlName="password" type="password" placeholder="Enter your password">
-                    <mat-error>
-                        @if( password?.hasError?.('required')) {
-                            Password is required.
-                        }
-                        @if( password?.hasError?.('minlength')) {
-                            Password must be at least 8 characters.
-                        }
-                    </mat-error>
+                <mat-icon matSuffix>password</mat-icon>
+
+                <mat-error>
+                    @if( password?.hasError?.('required')) {
+                    Password is required.
+                    }
+                    @if( password?.hasError?.('minlength')) {
+                    Password must be at least 8 characters.
+                    }
+                </mat-error>
             </mat-form-field>
             <button mat-raised-button [disabled]="loginForm.invalid || isSubmitting()">
                 {{isSubmitting()? 'Submitting...':'Submit'}}

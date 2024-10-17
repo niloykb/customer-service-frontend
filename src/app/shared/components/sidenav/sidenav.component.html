@@ -1,18 +1,22 @@
 <mat-nav-list>
     <mat-list-item #dashboardLink="routerLinkActive" [activated]="dashboardLink.isActive" routerLink="admin/dashboard"
         routerLinkActive="active">
-        <mat-icon>dashboard</mat-icon>Dashboard
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
     </mat-list-item>
     <mat-list-item #customerLink="routerLinkActive" [activated]="customerLink.isActive" routerLink="admin/customers"
         routerLinkActive="active">
-        <mat-icon>supervisor_account</mat-icon>Customers
+        <mat-icon matListItemIcon>supervisor_account</mat-icon>
+        <span matListItemTitle>Customers</span>
     </mat-list-item>
     <mat-list-item #usersLink="routerLinkActive" [activated]="usersLink.isActive" routerLink="admin/users"
         routerLinkActive="active">
-        <mat-icon>group</mat-icon>Users
+        <mat-icon matListItemIcon>group</mat-icon>
+        <span matListItemTitle>Users</span>
     </mat-list-item>
     <mat-list-item #invoicesLink="routerLinkActive" [activated]="invoicesLink.isActive" routerLink="admin/invoices"
         routerLinkActive="active">
-        <mat-icon>file_copy</mat-icon>Invoices
+        <mat-icon matListItemIcon>file_copy</mat-icon>
+        <span matListItemTitle>Invoices</span>
     </mat-list-item>
 </mat-nav-list>

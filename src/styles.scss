@@ -2,12 +2,8 @@
 
 @include mat.core();
 
-// $default-theme: mat.define-theme((density: (scale: -4)));
-$compact-theme: mat.define-theme((density: (scale: -4)));
-
 :root {
-    // @include mat.all-component-themes($default-theme);
-    @include mat.form-field-density($compact-theme)
+    @include mat.form-field-density(mat.define-theme((density: (scale: -4))));
 }
 
 html,
@@ -42,16 +38,14 @@ body {
     padding: 0 !important;
 }
 
-.mdc-list-item__primary-text {
-    gap: 10px;
-    display: flex !important;
-    align-items: center !important;
-}
-
 form {
     padding-top: 10px;
 }
 
 .text-capitalize {
     text-transform: capitalize;
+}
+
+.mat-mdc-dialog-title {
+    margin: 0 !important;
 }

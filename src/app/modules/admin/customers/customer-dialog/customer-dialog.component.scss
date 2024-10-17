@@ -3,9 +3,9 @@ mat-form-field {
     margin-bottom: 10px;
 }
 
-.form-fields-group {
+.form-row {
     display: flex;
-    gap: 15px;
+    column-gap: 15px;
 }
 
 .dialog-header {
@@ -16,5 +16,11 @@ mat-form-field {
 
     button {
         margin-right: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
     }
 }
