@@ -1,6 +1,7 @@
 .widget-list {
-    columns: 4 300px;
-    column-gap: 15px;
+    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .widget-box {
@@ -15,7 +16,6 @@
     border-radius: 4px;
     color: rgba(0, 0, 0, 0.87);
     background: white;
-    margin-bottom: 15px;
 }
 
 .cdk-drag-preview {
