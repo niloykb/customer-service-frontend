@@ -1,4 +1,4 @@
-.container {
+.login-container {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -8,18 +8,21 @@
         width: 400px;
         padding: 20px;
         margin: 0 auto;
+        text-align: center;
         background-color: #d7e3ff;
 
+        img {
+            align-self: center;
+        }
+
         mat-card-title {
-            text-align: center;
             margin-bottom: 20px;
         }
 
         .login-form {
-            gap: 10px;
+            row-gap: 10px;
             display: flex;
             flex-direction: column;
-
         }
     }
 }
