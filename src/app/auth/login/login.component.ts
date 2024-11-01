@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import {NgOptimizedImage} from "@angular/common";
 import { SharedModule } from '../../shared/shared.module';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -8,7 +9,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [SharedModule, ReactiveFormsModule],
+  imports: [SharedModule, ReactiveFormsModule, NgOptimizedImage],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
