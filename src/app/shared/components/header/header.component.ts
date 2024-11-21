@@ -9,11 +9,10 @@ import { SnackbarService } from '../../services/snackbar.service';
 type ModeType = 'query' | 'indeterminate';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [SharedModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+    selector: 'app-header',
+    imports: [SharedModule],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
   @Input() drawer!: MatDrawer;

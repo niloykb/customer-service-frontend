@@ -7,17 +7,16 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 import { SidenavComponent } from './shared/components/sidenav/sidenav.component';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    SharedModule, 
-    RouterOutlet, 
-    SidenavComponent, 
-    HeaderComponent, 
-    FooterComponent, 
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [
+        SharedModule,
+        RouterOutlet,
+        SidenavComponent,
+        HeaderComponent,
+        FooterComponent,
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
   authService = inject(AuthService);

@@ -6,12 +6,11 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [SharedModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-login',
+    imports: [SharedModule, ReactiveFormsModule],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
 

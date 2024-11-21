@@ -16,20 +16,19 @@ import { CustomerDialogComponent } from './customer-dialog/customer-dialog.compo
 import { Component, ViewChild, AfterViewInit, inject, OnDestroy, ElementRef } from '@angular/core';
 import { catchError, debounceTime, distinctUntilChanged, map, skip, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrl: './customers.component.scss',
-  standalone: true,
-  imports: [
-    MatIcon,
-    SharedModule,
-    MatSortModule,
-    MatTableModule,
-    MatInputModule,
-    MatPaginatorModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
-  ]
+    selector: 'app-customers',
+    templateUrl: './customers.component.html',
+    styleUrl: './customers.component.scss',
+    imports: [
+        MatIcon,
+        SharedModule,
+        MatSortModule,
+        MatTableModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatFormFieldModule,
+        MatProgressSpinnerModule,
+    ]
 })
 export class CustomersComponent implements AfterViewInit, OnDestroy {
 

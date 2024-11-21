@@ -10,11 +10,10 @@ import { FormValidationService } from '../../../../shared/validations/form-valid
 
 
 @Component({
-  selector: 'app-customer-dialog',
-  standalone: true,
-  imports: [SharedModule, ReactiveFormsModule],
-  templateUrl: './customer-dialog.component.html',
-  styleUrl: './customer-dialog.component.scss'
+    selector: 'app-customer-dialog',
+    imports: [SharedModule, ReactiveFormsModule],
+    templateUrl: './customer-dialog.component.html',
+    styleUrl: './customer-dialog.component.scss'
 })
 export class CustomerDialogComponent {
 
